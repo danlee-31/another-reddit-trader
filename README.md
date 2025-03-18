@@ -47,7 +47,7 @@ reddit-powered-trader/
 
 - Python 3.9+
 - Reddit API credentials (for scraping, not needed now)
-- Polygon API key (for stock data)
+- Polygon API key (for stock data, potentially not used)
 - Snowflake credentials (if using Snowflake, not needed now)
 
 ### Installation
