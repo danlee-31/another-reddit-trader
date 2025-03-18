@@ -17,7 +17,7 @@ Reddit-Powered Trader is an automated trading system that leverages sentiment an
 
 - **Python**: Primary language.
 - **SQLite / Snowflake**: Database for storing trades and post data.
-- **Polygon API**: Fetches stock price data.
+- **yfinance**: Fetches stock price data.
 - **Reddit API (PRAW / Pushshift.io)**: Retrieves posts from r/wallstreetbets.
 - **Flask**: For the web app interface.
 - **Discord.py** (Future): Discord bot for manual trade execution.
