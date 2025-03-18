@@ -1,6 +1,14 @@
 from dataclasses import dataclass
 from datetime import datetime
 from typing import List, Dict
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Access the environment variables
+POLYGON_API_KEY = os.getenv('POLYGON_API_KEY')
 
 # Define Trade dataclass
 @dataclass
