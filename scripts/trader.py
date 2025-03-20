@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from typing import List, Dict, Any, Tuple
-import os
 import yfinance as yf
 
 # Define Trade dataclass
@@ -15,7 +14,6 @@ class Trade:
 # Placeholder function to query Polygon API for stock price
 def get_stock_price(ticker: str, date: datetime) -> float:
     """Fetches stock price from Polygon API for a given ticker and date."""
-    # TODO: Implement API call
     stock = yf.Ticker(ticker)
     start = date.strftime('%Y-%m-%d')
     end = (date + timedelta(days=1)).strftime('%Y-%m-%d')
@@ -43,21 +41,22 @@ def execute_trade(portfolio: Dict[str, Dict[str, Any]], trade: Trade, balance: f
     
     # if the action is 'buy', add number of shares; if 'sell', remove shares
     #   update the average cost based on the total cost of shares
+    current_position = portfolio[trade.ticker]
     if trade.action == 'buy':
         total_cost = price * trade.quantity
-        total_value = portfolio[trade.ticker]["average_cost"] * portfolio[trade.ticker]["shares"] + total_cost
-        total_shares = portfolio[trade.ticker]["shares"] + trade.quantity
-        portfolio[trade.ticker]["average_cost"] = total_value / total_shares
-        portfolio[trade.ticker]["shares"] = total_shares
+        total_value = current_position["average_cost"] * current_position["shares"] + total_cost
+        total_shares = current_position["shares"] + trade.quantity
+        current_position["average_cost"] = total_value / total_shares
+        current_position["shares"] = total_shares
         balance -= total_cost
     elif trade.action == 'sell':
-        if trade.quantity > portfolio[trade.ticker]["shares"]:
+        if trade.quantity > current_position["shares"]:
             raise ValueError("Not enough shares to sell")
         total_cost = price * trade.quantity
-        portfolio[trade.ticker]["shares"] -= trade.quantity
+        current_position["shares"] -= trade.quantity
         balance += total_cost
 
-    portfolio[trade.ticker]["trades"].append(trade)
+    current_position["trades"].append(trade)
 
     return portfolio, balance
 
@@ -65,15 +64,15 @@ def execute_trade(portfolio: Dict[str, Dict[str, Any]], trade: Trade, balance: f
 def process_trades(trades: List[Trade], balance: float) -> Tuple[Dict[str, Dict[str, float]], float]:
     """Processes a list of trades and returns the updated portfolio."""
 
-    # TODO: create a portfolio dictionary to store the current position of each stock
+    # create a portfolio dictionary to store the current position of each stock
     portfolio = {}
 
-    # TODO: loop through each "trade" in the list of trade "trades"
+    # loop through each "trade" in the list of trade "trades"
     #   call the "execute_trade" function to update the portfolio
     for trade in trades:
         portfolio, balance = execute_trade(portfolio, trade, balance)
 
-    # TODO: return the final portfolio
+    # return the final portfolio
     return portfolio, balance
 
 # Example usage
